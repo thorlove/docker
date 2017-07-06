@@ -1,0 +1,13 @@
+{
+  "name": "node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": "Anand Mani Sankar",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.12.3",
+    "redis": "^0.12.1",
+    "redis-sentinel": "^0.3.3"
+  }
+}

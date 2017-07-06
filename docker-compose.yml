@@ -1,0 +1,121 @@
+version: '2'
+services:
+  lbs:
+    build: ./lbs
+    links:
+      - nginx1:nginx1
+      - nginx2:nginx2
+      - nginx3:nginx3
+    ports:
+      - "80:80"
+  nginx1:
+    build: ./nginx
+    links:
+      - node1:node1
+      - node2:node2
+      - node3:node3
+  nginx2:
+    build: ./nginx
+    links:
+      - node1:node1
+      - node2:node2
+      - node3:node3
+  nginx3:
+    build: ./nginx
+    links:
+      - node1:node1
+      - node2:node2
+      - node3:node3
+  node1:
+    build: ./node
+    links:
+      - redis-slave1:redis-slave1
+      - redis-slave2:redis-slave2
+      - redis-sentinel1:redis-sentinel1
+      - redis-sentinel2:redis-sentinel2
+      - redis-sentinel3:redis-sentinel3
+    ports:
+      - "3000"
+  node2:
+    build: ./node
+    links:
+      - redis-slave1:redis-slave1
+      - redis-slave2:redis-slave2
+      - redis-sentinel1:redis-sentinel1
+      - redis-sentinel2:redis-sentinel2
+      - redis-sentinel3:redis-sentinel3
+    ports:
+      - "3000"
+  node3:
+    build: ./node
+    links:
+      - redis-slave1:redis-slave1
+      - redis-slave2:redis-slave2
+      - redis-sentinel1:redis-sentinel1
+      - redis-sentinel2:redis-sentinel2
+      - redis-sentinel3:redis-sentinel3
+    ports:
+      - "3000"
+  redis-master:
+    build: ./redis   
+    environment:
+      redis_port: '16379'
+    ports:
+      - "16379"
+    command:
+      - master
+  redis-slave1:
+    build: ./redis
+    environment:
+      master_port: '16379'
+      redis_port: '16380'
+    links:
+      - redis-master:redis-master
+    ports:
+      - "16380"
+    command:
+      - slave
+  redis-slave2:
+    build: ./redis
+    environment:
+      master_port: '16379'
+      redis_port: '16380'
+    links:
+      - redis-master:redis-master
+    ports:
+      - "16380"
+    command:
+      - slave
+  redis-sentinel1:
+    build: ./redis
+    environment:
+      master_port: '16379'
+      sentinel_port: '16382'
+    links:
+      - redis-master:redis-master
+    ports:
+      - "16382"
+    command:
+      - sentinel
+  redis-sentinel2:
+    build: ./redis
+    environment:
+      master_port: '16379'
+      sentinel_port: '16382'
+    links:
+      - redis-master:redis-master
+    ports:
+      - "16382"
+    command:
+      - sentinel
+  redis-sentinel3:
+    build: ./redis
+    environment:
+      master_port: '16379'
+      sentinel_port: '16382'
+    links:
+      - redis-master:redis-master
+    ports:
+      - "16382"
+    command:
+      - sentinel
